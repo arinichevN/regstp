@@ -1,0 +1,9 @@
+
+#ifndef LIBPAS_REGSMP_H
+#define LIBPAS_REGSMP_H
+
+#define ACP_CMD_REGSMP_PROG_SET_STATE 'r'
+#define ACP_CMD_REGSMP_PROG_GET_DATA 'q'
+
+#endif 
+

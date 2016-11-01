@@ -1,0 +1,17 @@
+#ifndef LIBPAS_ACP_REGULATOR_H
+#define LIBPAS_ACP_REGULATOR_H
+
+
+#define ACP_CMD_REG_PROG_START 'a'
+#define ACP_CMD_REG_PROG_STOP 'b'
+#define ACP_CMD_REG_PROG_TUNE 'c'
+#define ACP_CMD_REG_PROG_ADD 'd'
+#define ACP_CMD_REG_PROG_DELETE 'e'
+#define ACP_CMD_REG_PROG_SWITCH 'f'
+#define ACP_CMD_REG_PROG_GET_STATE 'g'
+#define ACP_CMD_REG_PROG_GET_STATE_STSP 'h'
+#define ACP_CMD_REG_PROG_GET_RUNTIME 'i'
+
+
+#endif
+

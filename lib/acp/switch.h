@@ -1,0 +1,9 @@
+#ifndef LIBPAS_ACP_SWITCH_H
+#define LIBPAS_ACP_SWITCH_H
+
+
+#define ACP_CMD_SWITCH_TOGGLE_EM 'a'
+#define ACP_CMD_SWITCH_GET_EM_STATE 'b'
+
+
+#endif
