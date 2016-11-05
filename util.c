@@ -658,7 +658,7 @@ void printAll(ProgList *list, PeerList *pl, EMList *el, SensorList *sl) {
                 sl->item[i].id,
                 sl->item[i].remote_id,
                 sl->item[i].source->id,
-                sl->item[i].value.temp,
+                sl->item[i].value.value,
                 sl->item[i].value.tm.tv_sec,
                 sl->item[i].value.tm.tv_nsec,
                 sl->item[i].value.state

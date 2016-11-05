@@ -172,7 +172,7 @@ void acp_parsePackFTS(const char *buf, FTSList *list, size_t list_max_size) {
             break;
         }
         list->item[list->length].id = id;
-        list->item[list->length].temp = temp;
+        list->item[list->length].value = temp;
         list->item[list->length].tm.tv_sec = tm.tv_sec;
         list->item[list->length].tm.tv_nsec = tm.tv_nsec;
         list->item[list->length].state = state;

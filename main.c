@@ -752,71 +752,27 @@ int stepControl(Step *item) {
             break;
         case RUN:
             if (sensorRead(item->sensor)) {
-                item->output = pid(item->pid, item->cgoal, item->sensor->value.temp);
-                //  item->output = pidwt(item->pid, item->cgoal, item->sensor->value.temp, item->sensor->value.tm);
+                item->output = pid(item->pid, item->cgoal, item->sensor->value.value);
+                //  item->output = pidwt(item->pid, item->cgoal, item->sensor->value.value, item->sensor->value.tm);
 #ifdef MODE_DEBUG
 
-                printf("goal=%.1f real=%.1f out=%.1f\n", item->cgoal, item->sensor->value.temp, item->output);
+                printf("goal=%.1f real=%.1f out=%.1f\n", item->cgoal, item->sensor->value.value, item->output);
 
                 //     printf("pid_mode=%c pid_ie=%.1f\n", item->pid->mode, item->pid->integral_error);
 #endif
                 controlEM(item->em, item->output);
-            }
-
-            //  {item->sensor->value.temp = 20; item->sensor->value.state = 1;}
-
-            //end of step control
-            switch (item->state_sp) {
-                case INIT:
-                    if (item->stop_kind == STOP_KIND_TIME) {
-                        item->state_sp = BYTIME;
-                    } else if (item->stop_kind == STOP_KIND_GOAL) {
-                        item->wait_above = (item->goal > item->sensor->value.temp);
-                        item->state_sp = BYGOAL;
-                    }
-                    break;
-                case BYTIME:
-                    if (ton_ts(item->duration, &item->tmr)) {
-                        item->state = OFF;
-                        //  puts("step done by time");
-                        controlEM(item->em, 0.0f);
-                        return 1;
-                    }
-                    break;
-                case BYGOAL:
-                    if (item->wait_above) {
-                        if (item->goal <= item->sensor->value.temp) {
-                            item->state = OFF;
-                            //  puts("step done by goal <");
-                            controlEM(item->em, 0.0f);
-                            return 1;
-                        }
-                    } else {
-                        if (item->goal >= item->sensor->value.temp) {
-                            item->state = OFF;
-                            //  puts("step done by goal >");
-                            controlEM(item->em, 0.0f);
-                            return 1;
-                        }
-                    }
-                    break;
-                default:
-                    item->state_sp = OFF;
-                    break;
-            }
-
-            //goal correction
+                //goal correction
             switch (item->state_ch) {
                 case INIT:
                     if (item->even_change && item->stop_kind == STOP_KIND_TIME) {
                         if (item->sensor->value.state) {
                             item->goal_correction = 0;
-                            item->temp_start = item->sensor->value.temp;
+                            item->temp_start = item->sensor->value.value;
                             if (item->duration.tv_sec > 0) {
-                                item->goal_correction = (item->goal - item->sensor->value.temp) / item->duration.tv_sec;
+                                item->goal_correction = (item->goal - item->sensor->value.value) / item->duration.tv_sec;
                             }
                             if (item->duration.tv_nsec > 0) {
-                                item->goal_correction += (item->goal - item->sensor->value.temp) / item->duration.tv_nsec * NANO_FACTOR;
+                                item->goal_correction += (item->goal - item->sensor->value.value) / item->duration.tv_nsec * NANO_FACTOR;
                             }
                             item->state_ch = RUN;
                             //   printf("goal_correction=%f\n", item->goal_correction);
@@ -835,6 +791,51 @@ int stepControl(Step *item) {
                     item->state_ch = OFF;
                     break;
             }
+            }
+
+            //  {item->sensor->value.value = 20; item->sensor->value.state = 1;}
+
+            //end of step control
+            switch (item->state_sp) {
+                case INIT:
+                    if (item->stop_kind == STOP_KIND_TIME) {
+                        item->state_sp = BYTIME;
+                    } else if (item->stop_kind == STOP_KIND_GOAL) {
+                        item->wait_above = (item->goal > item->sensor->value.value);
+                        item->state_sp = BYGOAL;
+                    }
+                    break;
+                case BYTIME:
+                    if (ton_ts(item->duration, &item->tmr)) {
+                        item->state = OFF;
+                        //  puts("step done by time");
+                        controlEM(item->em, 0.0f);
+                        return 1;
+                    }
+                    break;
+                case BYGOAL:
+                    if (item->wait_above) {
+                        if (item->goal <= item->sensor->value.value) {
+                            item->state = OFF;
+                            //  puts("step done by goal <");
+                            controlEM(item->em, 0.0f);
+                            return 1;
+                        }
+                    } else {
+                        if (item->goal >= item->sensor->value.value) {
+                            item->state = OFF;
+                            //  puts("step done by goal >");
+                            controlEM(item->em, 0.0f);
+                            return 1;
+                        }
+                    }
+                    break;
+                default:
+                    item->state_sp = OFF;
+                    break;
+            }
+
+            
             break;
 
         default:

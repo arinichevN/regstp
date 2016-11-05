@@ -85,7 +85,7 @@ typedef struct {
 
 typedef struct {
     int id;
-    float temp;
+    float value;
     struct timespec tm;
     int state;
 } FTS;

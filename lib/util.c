@@ -1,4 +1,3 @@
-
 #include "util.h"
 
 void dumpStr(const char *buf) {
@@ -59,4 +58,3 @@ char * bufCat(char * buf, const char *str, size_t size) {
     }
     return strcat(buf, str);
 }
-
